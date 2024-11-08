@@ -1,0 +1,19 @@
+services:
+  sql.server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  volxyseat.payment:
+    image: volxyseat-payment.api:${TAG:-dev}
+    build:
+      context: ./Payment.API/
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+
+  # volxyseat.api:
+  #   image: PI/volxyseat.api:latest
+  #   build:
+  #     context: .
+  #     dockerfile: ./VOLXYSEAT.API/Dockerfile
+  #   depends_on:
+  #     - sql.server
