@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using System.Data;
 using System.Text;
 using VOLXYSEAT.DOMAIN.Core;
@@ -54,6 +55,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(
@@ -88,6 +92,7 @@ builder.Services.AddIdentityCore<User>(options =>
     .AddUserManager<UserManager<User>>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<JWTService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
