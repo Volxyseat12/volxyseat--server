@@ -11,7 +11,7 @@ namespace VOLXYSEAT.INFRASTRUCTURE.Repositories
     public class SubscriptionRepository : BaseRepository<Subscription, Guid>, ISubscriptionRepository
     {
         private readonly DataContext _context;
-        public SubscriptionRepository(DataContext context, IDbConnection dbConnection) : base(context)
+        public SubscriptionRepository(DataContext context) : base(context)
         {
             _context = context;
         }

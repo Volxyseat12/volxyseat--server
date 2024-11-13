@@ -10,10 +10,16 @@ public class TransactionRepository : BaseRepository<Transaction, Guid>, ITransac
 {
 
     private readonly DataContext _context;
-    public TransactionRepository(DataContext context, IDbConnection dbConnection) : base(context)
+    public TransactionRepository(DataContext context) : base(context)
     {
         _context = context;
     }
+
+    public void DisableTransaction(Transaction transaction)
+    {
+        _entities.Update(transaction);
+    }
+
     public async Task<Transaction> GetByClientId(Guid id)
     {
         var transaction = await _context.Transactions

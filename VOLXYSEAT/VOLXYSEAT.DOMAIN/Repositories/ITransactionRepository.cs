@@ -9,4 +9,5 @@ namespace VOLXYSEAT.DOMAIN.Repositories;
 public interface ITransactionRepository : IRepository<Transaction, Guid>
 {
     Task<Transaction> GetByClientId(Guid id);
+    void DisableTransaction(Transaction transaction);
 }

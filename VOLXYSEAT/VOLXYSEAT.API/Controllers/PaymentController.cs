@@ -1,13 +1,16 @@
 ﻿
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using VOLXYSEAT.API.Application.Commands.MercadoPago.CancelPreApproval;
 using VOLXYSEAT.API.Application.Commands.MercadoPago.CreatePreApproval;
 using VOLXYSEAT.API.Application.Commands.MercadoPago.CreatePreApprovalPlan;
 
 
 namespace VOLXYSEAT.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
 public class Payment(IMediator mediator) : ControllerBase
@@ -24,15 +27,21 @@ public class Payment(IMediator mediator) : ControllerBase
     [HttpPost("create-preapproval")]
     public async Task<IActionResult> CreatePreApproval([FromBody] CreatePreApprovalCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        catch (Exception ex) 
-        {
-            return BadRequest(ex.Message);
-        }
+        var result = await _mediator.Send(command);
+
+        if (result == null) return BadRequest();
+
+        return Ok(result);
+    }
+
+    [HttpPut("cancel-preapproval")]
+    public async Task<IActionResult> CancelPreApproval([FromBody] CancelPreApprovalCommand command)
+    {
+        var result = await _mediator.Send(command);
+
+        if (result == null) return BadRequest();
+
+        return Ok(result);
     }
 }
 

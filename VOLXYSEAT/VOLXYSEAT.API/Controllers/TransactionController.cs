@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VOLXYSEAT.API.Application.Commands.Transaction.Create;
+using VOLXYSEAT.API.Application.Commands.Transaction.Disable;
 using VOLXYSEAT.API.Application.Queries.Transaction.GetByUserId;
 
 namespace VOLXYSEAT.API.Controllers;
@@ -35,5 +36,18 @@ public class TransactionController : ControllerBase
             return BadRequest();
 
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut]
+    public async Task<IActionResult> DisableTransaction([FromBody] DisableTransactionCommand request)
+    {
+        var result = await _mediator.Send(request);
+
+        if (!result) return BadRequest();
+
+        return Ok(new {
+            message = "the transaction was successfully disabled"
+        });
     }
 }
