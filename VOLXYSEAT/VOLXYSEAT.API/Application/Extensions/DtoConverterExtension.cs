@@ -17,6 +17,7 @@ public static class DtoConverterExtension
         {
             SubscriptionId = transaction.SubscriptionId,
             ClientId = transaction.ClientId,
+            MercadoPagoSubscriptionId = transaction.MercadoPagoSubscriptionId
         };
     }
 }

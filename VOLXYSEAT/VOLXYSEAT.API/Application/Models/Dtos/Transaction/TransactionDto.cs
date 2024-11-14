@@ -4,6 +4,6 @@ public class TransactionDto
 {  
     public Guid SubscriptionId { get; set; }
     public Guid ClientId { get; set; }
-    public string MercadoPagoSubscriptionId { get; private set; }
+    public string MercadoPagoSubscriptionId { get; set; }
 
 }
