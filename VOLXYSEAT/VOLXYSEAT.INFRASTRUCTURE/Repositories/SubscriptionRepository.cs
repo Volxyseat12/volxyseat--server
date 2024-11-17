@@ -35,9 +35,12 @@ namespace VOLXYSEAT.INFRASTRUCTURE.Repositories
         }
 
 
-        public virtual void Update(Subscription obj)
+        public async Task UpdateAsync(Subscription request)
         {
-            _entities.Update(obj);
+            if (request == null) throw new VolxyseatDomainException(nameof(request));
+
+            _context.Update(request);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Subscription>> GetAllAsync()
@@ -45,6 +48,7 @@ namespace VOLXYSEAT.INFRASTRUCTURE.Repositories
             var subscriptions = await _context.Subscriptions
                 .AsNoTracking()
                 .Include(s => s.SubscriptionProperties) 
+                .OrderBy(s => s.Price)
                 .ToListAsync();
 
             return subscriptions;

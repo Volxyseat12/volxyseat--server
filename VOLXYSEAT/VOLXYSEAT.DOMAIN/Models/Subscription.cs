@@ -33,7 +33,24 @@ namespace VOLXYSEAT.DOMAIN.Models
         public string Description { get; private set; }
         public decimal Price { get; private set; }
         public DateTime CreatedOn { get; private set; }
+        public DateTime UpdatedOn { get; private set; }
         public string MercadoPagoPlanId { get; private set; }
         public List<SubscriptionHistory> History => _histories;
+
+        public void UpdateDetails(
+            SubscriptionEnum typeId,
+            SubscriptionStatus statusId,
+            string description,
+            decimal price,
+            string mercadoPagoPlanId,
+            DateTime updatedOn)
+        {
+            TypeId = typeId;
+            StatusId = statusId;
+            Description = description;
+            Price = price;
+            MercadoPagoPlanId = mercadoPagoPlanId;
+            UpdatedOn = updatedOn;    
+        }
     }
 }

@@ -7,6 +7,7 @@ using VOLXYSEAT.API.Application.Commands.Subscription.Close;
 using VOLXYSEAT.API.Application.Commands.Subscription.Create;
 using VOLXYSEAT.API.Application.Models.ViewModel.Subscription;
 using Microsoft.AspNetCore.Authorization;
+using VOLXYSEAT.API.Application.Commands.Subscription.Update;
 
 namespace VOLXYSEAT.API.Controllers
 {
@@ -64,6 +65,18 @@ namespace VOLXYSEAT.API.Controllers
         {
             var result = await _mediator.Send(request);
             return result ? Ok() : BadRequest();
+        }
+
+        [HttpPut("{id:Guid}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> Update(Guid id,[FromBody] UpdateSubscriptionCommand request)
+        {
+            var command = new UpdateSubscriptionCommand(id, request.TypeId, request.StatusId, request.Description, request.Price, request.MercadoPagoPlanId, request.UpdatedOn, request.SubscriptionProperties);
+            var result = await _mediator.Send(command);
+
+            return !result ? Ok(result) : BadRequest();
         }
 
         [HttpPost("{id:Guid}/states/action=close")]
