@@ -63,7 +63,7 @@ namespace VOLXYSEAT.API.Controllers
         public async Task<IActionResult> Post([FromBody] CreateSubscriptionCommand request)
         {
             var result = await _mediator.Send(request);
-            return !result ? Ok() : BadRequest();
+            return result ? Ok() : BadRequest();
         }
 
         [HttpPost("{id:Guid}/states/action=close")]
