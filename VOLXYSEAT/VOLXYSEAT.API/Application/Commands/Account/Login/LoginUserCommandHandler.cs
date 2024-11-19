@@ -21,14 +21,14 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
         _userManager = userManager;
     }
 
-    private LoginUserResponse AddLoginUserResponse(User user)
+    private async Task<LoginUserResponse> AddLoginUserResponse(User user)
     {
-        return new LoginUserResponse(user.Name, _jwtService.JWTGenerateToken(user), user.Email, user.Id);
+        return new LoginUserResponse(user.Name, await _jwtService.JWTGenerateToken(user), user.Email, user.Id);
     }
 
     public async Task<LoginUserResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(request.UserName);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
@@ -37,6 +37,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
             throw new Exception("Senha incorreta.");
         }
 
-        return AddLoginUserResponse(user);
+        return await AddLoginUserResponse(user);
     }
 }
