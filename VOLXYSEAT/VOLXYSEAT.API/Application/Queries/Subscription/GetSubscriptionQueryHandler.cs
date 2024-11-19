@@ -33,7 +33,7 @@ namespace VOLXYSEAT.API.Application.Queries.Subscription
                 MercadoPagoPlanId = subscription.MercadoPagoPlanId,
                 Price = subscription.Price,
                 CreatedOn = subscription.CreatedOn,
-                MercadoPagoPlanId = subscription.MercadoPagoPlanId,
+                UpdatedOn = subscription.UpdatedOn,
                 SubscriptionProperties = subscription.SubscriptionProperties != null
             ? new SubscriptionPropertiesDto
             {

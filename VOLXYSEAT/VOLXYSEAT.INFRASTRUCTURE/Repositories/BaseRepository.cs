@@ -9,12 +9,13 @@ namespace VOLXYSEAT.INFRASTRUCTURE.Repositories
     {
         protected readonly DataContext _dataContext;
         protected readonly DbSet<TEntity> _entities;
-        public virtual IUnitOfWork UnitOfWork => _dataContext;
+        public virtual IUnitOfWork UnitOfWork { get; }
 
         public BaseRepository(DataContext context)
         {
             _dataContext = context ?? throw new ArgumentNullException(nameof(context));
             _entities = _dataContext.Set<TEntity>();
+            UnitOfWork = _dataContext;
         }
 
         public virtual async Task AddAsync(TEntity obj)

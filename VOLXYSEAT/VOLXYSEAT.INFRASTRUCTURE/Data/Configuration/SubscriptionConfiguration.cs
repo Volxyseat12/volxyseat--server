@@ -31,7 +31,12 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
             .IsRequired();
 
         builder.Property(s => s.CreatedOn)
+            .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd()
+            .IsRequired();
+
+        builder.Property(s => s.UpdatedOn)
+            .HasDefaultValueSql("GETUTCDATE()")
             .IsRequired();
 
         builder.HasMany(s => s.History)

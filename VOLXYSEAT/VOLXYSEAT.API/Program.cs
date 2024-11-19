@@ -1,3 +1,5 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
@@ -7,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.Data;
 using System.Text;
+using VOLXYSEAT.API.Application;
+using VOLXYSEAT.API.Application.Commands.Subscription.Create;
 using VOLXYSEAT.DOMAIN.Core;
 using VOLXYSEAT.DOMAIN.Models;
 using VOLXYSEAT.DOMAIN.Repositories;
@@ -19,7 +23,10 @@ var builder = WebApplication.CreateBuilder(args);
 var origin = "http://localhost:4200";
 
 // Add services to the container.
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.IncludeFields = true;
 });

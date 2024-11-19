@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using VOLXYSEAT.API.Application.Request;
 using VOLXYSEAT.DOMAIN.Exceptions;
 using VOLXYSEAT.DOMAIN.Models;
 using VOLXYSEAT.DOMAIN.Repositories;
@@ -22,15 +23,15 @@ namespace VOLXYSEAT.API.Application.Commands.Subscription.Update
             if (subscription == null) throw new VolxyseatDomainException(nameof(subscription));
 
             subscription.UpdateDetails(
-                request.TypeId,
-                request.StatusId,
-                request.Description,
-                request.Price,
-                request.MercadoPagoPlanId,
+                request.Subscription.TypeId,
+                request.Subscription.StatusId,
+                request.Subscription.Description,
+                request.Subscription.Price,
+                request.Subscription.MercadoPagoPlanId,
                 DateTime.UtcNow
             );
 
-            var subscriptionPropertiesDto = request.SubscriptionProperties;
+            var subscriptionPropertiesDto = request.Subscription.SubscriptionProperties;
             subscription.SubscriptionProperties = new SubscriptionProperties(
                 subscription.Id,
                 subscriptionPropertiesDto.Support,
@@ -55,7 +56,7 @@ namespace VOLXYSEAT.API.Application.Commands.Subscription.Update
                 subscriptionPropertiesDto.ServiceLevel
             );
 
-            await _repository.UpdateAsync(subscription);
+            await _repository.Update(subscription);
             var result = await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return result > 0;

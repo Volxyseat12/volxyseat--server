@@ -8,9 +8,9 @@ namespace VOLXYSEAT.DOMAIN.Models
 {
     public enum SubscriptionEnum : int
     {
-        Basic = 0,
-        Medium = 1,
-        Advanced = 2,
-        Personalized = 3
+        Basic,
+        Medium,
+        Advanced,
+        Personalized
     }
 }

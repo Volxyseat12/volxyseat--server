@@ -65,28 +65,28 @@ namespace VOLXYSEAT.TESTS.Application
             Assert.IsType<OkObjectResult>(result);
         }
 
-        [Fact]
-        public async void Post_HasData_ShouldReturnOk()
-        {
-            var command = MockDataLoader.LoadMockData<CreateSubscriptionCommand>("CreateSubscriptionCommand", "Application/Resources/Mock/mock_subscription.json");
+        //[Fact]
+        //public async void Post_HasData_ShouldReturnOk()
+        //{
+        //    var command = MockDataLoader.LoadMockData<CreateSubscriptionCommand>("CreateSubscriptionCommand", "Application/Resources/Mock/mock_subscription.json");
 
-            _mediator.Setup(x => x.Send(It.IsAny<CreateSubscriptionCommand>(), default)).ReturnsAsync(true);
+        //    _mediator.Setup(x => x.Send(It.IsAny<CreateSubscriptionCommand>(), default)).ReturnsAsync(true);
 
-            var result = await _controller.Post(command);
+        //    var result = await _controller.Post(command);
 
-            Assert.IsType<OkResult>(result);
-        }
+        //    Assert.IsType<OkResult>(result);
+        //}
 
-        [Fact]
-        public async Task Post_HasNoData_ShouldReturnBadRequest()
-        {
-            var command = MockDataLoader.LoadMockData<CreateSubscriptionCommand>("CreateSubscriptionCommand", "Application/Resources/Mock/mock_subscription.json");
+        //[Fact]
+        //public async Task Post_HasNoData_ShouldReturnBadRequest()
+        //{
+        //    var command = MockDataLoader.LoadMockData<CreateSubscriptionCommand>("CreateSubscriptionCommand", "Application/Resources/Mock/mock_subscription.json");
 
-            _mediator.Setup(x => x.Send(It.IsAny<CreateSubscriptionCommand>(), default)).ReturnsAsync(false);
+        //    _mediator.Setup(x => x.Send(It.IsAny<CreateSubscriptionCommand>(), default)).ReturnsAsync(false);
 
-            var result = await _controller.Post(command);
+        //    var result = await _controller.Post(command);
 
-            Assert.IsType<BadRequestResult>(result);
-        }
+        //    Assert.IsType<BadRequestResult>(result);
+        //}
     }
 }

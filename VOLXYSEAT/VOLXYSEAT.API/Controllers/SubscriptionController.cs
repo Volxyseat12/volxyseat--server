@@ -8,6 +8,7 @@ using VOLXYSEAT.API.Application.Commands.Subscription.Create;
 using VOLXYSEAT.API.Application.Models.ViewModel.Subscription;
 using Microsoft.AspNetCore.Authorization;
 using VOLXYSEAT.API.Application.Commands.Subscription.Update;
+using VOLXYSEAT.API.Application.Models.Requests.Subscription;
 
 namespace VOLXYSEAT.API.Controllers
 {
@@ -46,14 +47,14 @@ namespace VOLXYSEAT.API.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(typeof(SubscriptionViewModel), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllSubscriptionQuery();
             var subscriptions = await _mediator.Send(query);
 
             if (subscriptions == null || !subscriptions.Any())
-                return NotFound("No subscriptions found.");
+                return NoContent();
 
             return Ok(subscriptions);
         }
@@ -61,9 +62,13 @@ namespace VOLXYSEAT.API.Controllers
         [HttpPost("/new-subscription")]
         [ProducesResponseType(typeof(SubscriptionViewModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post([FromBody] CreateSubscriptionCommand request)
+        public async Task<IActionResult> Post([FromBody] SubscriptionRequest request)
         {
-            var result = await _mediator.Send(request);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var command = new CreateSubscriptionCommand(request);
+            var result = await _mediator.Send(command);
+
             return result ? Ok() : BadRequest();
         }
 
@@ -71,12 +76,12 @@ namespace VOLXYSEAT.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Update(Guid id,[FromBody] UpdateSubscriptionCommand request)
+        public async Task<IActionResult> Update(Guid id,[FromBody] SubscriptionRequest request)
         {
-            var command = new UpdateSubscriptionCommand(id, request.TypeId, request.StatusId, request.Description, request.Price, request.MercadoPagoPlanId, request.UpdatedOn, request.SubscriptionProperties);
+            var command = new UpdateSubscriptionCommand(id, request);
             var result = await _mediator.Send(command);
 
-            return !result ? Ok(result) : BadRequest();
+            return result ? Ok() : BadRequest();
         }
 
         [HttpPost("{id:Guid}/states/action=close")]

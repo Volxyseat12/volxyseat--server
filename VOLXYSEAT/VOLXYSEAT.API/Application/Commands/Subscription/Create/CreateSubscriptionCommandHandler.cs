@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using VOLXYSEAT.API.Application.Request;
 using VOLXYSEAT.DOMAIN.Exceptions;
 using VOLXYSEAT.DOMAIN.Models;
 using VOLXYSEAT.DOMAIN.Repositories;
@@ -19,14 +20,13 @@ namespace VOLXYSEAT.API.Application.Commands.Subscription.Create
             if (request == null) throw new VolxyseatDomainException(nameof(request));
 
             var subscription = new DOMAIN.Models.Subscription(
-                request.TypeId,
-                request.StatusId,
-                request.Description,
-                request.Price,
-                request.CreatedOn,
-                request.MercadoPagoPlanId
+                request.Subscription.TypeId,
+                request.Subscription.StatusId,
+                request.Subscription.Description,
+                request.Subscription.Price,
+                request.Subscription.MercadoPagoPlanId
             );
-            var subscriptionPropertiesDto = request.SubscriptionProperties;
+            var subscriptionPropertiesDto = request.Subscription.SubscriptionProperties;
             var subscriptionProperties = new SubscriptionProperties(
                 subscription.Id,
                 subscriptionPropertiesDto.Support,
