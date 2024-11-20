@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 using VOLXYSEAT.API.Application.Commands.Account.Login;
 using VOLXYSEAT.API.Application.Commands.Account.Logout;
 using VOLXYSEAT.API.Application.Commands.Account.Register;
+using VOLXYSEAT.API.Application.Responses;
 
 namespace VOLXYSEAT.API.Controllers
 {
@@ -19,9 +21,9 @@ namespace VOLXYSEAT.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("new-user")]
-        //[ProducesResponseType(typeof(UserViewModel), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [HttpPost("register")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Post([FromBody] RegisterUserCommand request)
         {
             var result = await _mediator.Send(request);
@@ -29,6 +31,8 @@ namespace VOLXYSEAT.API.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginUserResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand request)
         {
             var result = await _mediator.Send(request);
@@ -38,16 +42,18 @@ namespace VOLXYSEAT.API.Controllers
 
         [Authorize]
         [HttpPost("logout")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> Logout()
         {
-
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var result = await _mediator.Send(new LogoutCommand(Guid.Parse(userId)));
 
             if(result)
-                return Ok(new {message = "Logout successful."});
+                return Ok("Logout successful.");
 
-            return BadRequest(new { message = "Failed to logout." });
+            return BadRequest("Failed to logout.");
         }
     }
 }
