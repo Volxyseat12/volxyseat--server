@@ -34,9 +34,10 @@ public class Payment(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("cancel-preapproval")]
-    public async Task<IActionResult> CancelPreApproval([FromBody] CancelPreApprovalCommand command)
+    [HttpPut("cancel-preapproval/{id}")]
+    public async Task<IActionResult> CancelPreApproval(string id)
     {
+        var command = new CancelPreApprovalCommand(id);
         var result = await _mediator.Send(command);
 
         if (result == null) return BadRequest();

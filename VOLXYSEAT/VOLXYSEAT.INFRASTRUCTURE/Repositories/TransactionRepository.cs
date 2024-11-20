@@ -24,7 +24,7 @@ public class TransactionRepository : BaseRepository<Transaction, Guid>, ITransac
     {
         var transaction = await _context.Transactions
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.ClientId == id);
+            .FirstOrDefaultAsync(t => t.ClientId == id && t.IsActive);
 
         return transaction;
     }

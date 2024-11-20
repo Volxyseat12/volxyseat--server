@@ -39,9 +39,10 @@ public class TransactionController : ControllerBase
     }
 
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> DisableTransaction([FromBody] DisableTransactionCommand request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> DisableTransaction(Guid id)
     {
+        var request = new DisableTransactionCommand(id);
         var result = await _mediator.Send(request);
 
         if (!result) return BadRequest();
