@@ -46,6 +46,8 @@ namespace VOLXYSEAT.API.Application.Commands.Account.Register
             if (!result.Succeeded)
                 return false;
 
+            await _userManager.AddToRoleAsync(userToAdd, "user");
+
             return true;
 
         }

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using VOLXYSEAT.DOMAIN.Repositories;
 
-namespace VOLXYSEAT.API.Application.Commands.Subscription.Create
+namespace VOLXYSEAT.API.Application.Commands.Subscription.Update
 {
-    public class CreateSubscriptionCommandValidator : AbstractValidator<CreateSubscriptionCommand>
+    public class UpdateSubscriptionCommandValidator: AbstractValidator<UpdateSubscriptionCommand>
     {
-        public CreateSubscriptionCommandValidator(ISubscriptionRepository repository)
+        public UpdateSubscriptionCommandValidator(ISubscriptionRepository repository)
         {
 
             RuleFor(x => x.Subscription.TypeId)
@@ -20,7 +20,6 @@ namespace VOLXYSEAT.API.Application.Commands.Subscription.Create
 
             RuleFor(x => x.Subscription.Price)
                 .GreaterThan(0).WithMessage("Price must be greater than zero");
-
         }
     }
 }

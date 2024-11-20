@@ -4,4 +4,4 @@ using VOLXYSEAT.API.Application.Responses;
 
 namespace VOLXYSEAT.API.Application.Commands.Account.Login;
 
-public record LoginUserCommand(string UserName, string Password) : IRequest<LoginUserResponse>;
+public record LoginUserCommand(string Email, string Password) : IRequest<LoginUserResponse>;

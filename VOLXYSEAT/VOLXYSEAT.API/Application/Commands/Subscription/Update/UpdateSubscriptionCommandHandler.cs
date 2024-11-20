@@ -4,30 +4,35 @@ using VOLXYSEAT.DOMAIN.Exceptions;
 using VOLXYSEAT.DOMAIN.Models;
 using VOLXYSEAT.DOMAIN.Repositories;
 
-namespace VOLXYSEAT.API.Application.Commands.Subscription.Create
+namespace VOLXYSEAT.API.Application.Commands.Subscription.Update
 {
-    public class CreateSubscriptionCommandHandler : IRequestHandler<CreateSubscriptionCommand, bool>
+    public class UpdateSubscriptionCommandHandler : IRequestHandler<UpdateSubscriptionCommand, bool>
     {
         private readonly ISubscriptionRepository _repository;
 
-        public CreateSubscriptionCommandHandler(ISubscriptionRepository repository)
+        public UpdateSubscriptionCommandHandler(ISubscriptionRepository repository)
         {
-            _repository = repository ?? throw new VolxyseatDomainException(nameof(repository));
+            _repository = repository ?? throw new VolxyseatDomainException(nameof(repository)); 
         }
-
-        public async Task<bool> Handle(CreateSubscriptionCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateSubscriptionCommand request, CancellationToken cancellationToken)
         {
             if (request == null) throw new VolxyseatDomainException(nameof(request));
 
-            var subscription = new DOMAIN.Models.Subscription(
+            var subscription = await _repository.GetByIdAsync(request.Id);
+
+            if (subscription == null) throw new VolxyseatDomainException(nameof(subscription));
+
+            subscription.UpdateDetails(
                 request.Subscription.TypeId,
                 request.Subscription.StatusId,
                 request.Subscription.Description,
                 request.Subscription.Price,
-                request.Subscription.MercadoPagoPlanId
+                request.Subscription.MercadoPagoPlanId,
+                DateTime.UtcNow
             );
+
             var subscriptionPropertiesDto = request.Subscription.SubscriptionProperties;
-            var subscriptionProperties = new SubscriptionProperties(
+            subscription.SubscriptionProperties = new SubscriptionProperties(
                 subscription.Id,
                 subscriptionPropertiesDto.Support,
                 subscriptionPropertiesDto.Phone,
@@ -51,12 +56,9 @@ namespace VOLXYSEAT.API.Application.Commands.Subscription.Create
                 subscriptionPropertiesDto.ServiceLevel
             );
 
-
-            subscription.SubscriptionProperties = subscriptionProperties;
-
-
-            await _repository.AddAsync(subscription);
+            await _repository.Update(subscription);
             var result = await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
             return result > 0;
         }
     }
